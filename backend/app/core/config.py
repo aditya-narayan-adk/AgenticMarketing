@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite+aiosqlite:///./marketing_platform.db"
     
     # Anthropic
+    # TODO :  Update to latest model
     ANTHROPIC_API_KEY: Optional[str] = None
     ANTHROPIC_MODEL: str = "claude-sonnet-4-20250514"
     

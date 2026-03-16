@@ -1,3 +1,6 @@
+# TODO : Switch Database_URL to mongoDB
+# TODO : Use Anthropic_key and Secret_key from .env
+
 version: "3.9"
 
 services:
