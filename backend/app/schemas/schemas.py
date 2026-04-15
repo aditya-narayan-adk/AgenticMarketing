@@ -33,6 +33,7 @@ class AdStatusEnum(str, Enum):
     under_review = "under_review"
     ethics_review = "ethics_review"
     approved = "approved"
+    ethics_cleared = "ethics_cleared"
     published = "published"
     paused = "paused"
     optimizing = "optimizing"
@@ -103,6 +104,34 @@ class UserOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ─── Profile Schemas ──────────────────────────────────────────────────────────
+
+class UserRoleUpdate(BaseModel):
+    role: UserRoleEnum
+
+
+# ─── Profile Schemas ──────────────────────────────────────────────────────────
+
+class ProfileOut(BaseModel):
+    id: str
+    email: str
+    full_name: str
+    role: UserRoleEnum
+    is_active: bool
+    created_at: datetime
+    company_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class ProfileUpdate(BaseModel):
+    full_name: str = Field(..., min_length=1, max_length=128)
+
+class PasswordChange(BaseModel):
+    otp: str = Field(..., min_length=6, max_length=6)
+    new_password: str = Field(..., min_length=8)
 
 
 # ─── Company Document Schemas ─────────────────────────────────────────────────
@@ -335,3 +364,22 @@ class MinorEditRequest(BaseModel):
 
 class RewriteStrategyRequest(BaseModel):
     instructions: str
+
+
+# ─── Ethics Reviewer Action Schemas ──────────────────────────────────────────
+
+class EthicsIssue(BaseModel):
+    type: str
+    description: str
+    suggestion: Optional[str] = None
+
+class EthicsRegenerateRequest(BaseModel):
+    issues: List[EthicsIssue]
+    notes: Optional[str] = None
+
+class EthicsClearRequest(BaseModel):
+    notes: Optional[str] = None
+
+class PublisherRegenerateRequest(BaseModel):
+    selected_suggestions: List[Dict[str, Any]]   # items from priority_actions / content_changes
+    notes: Optional[str] = None

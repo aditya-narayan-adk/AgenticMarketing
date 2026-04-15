@@ -195,6 +195,7 @@ export default function CampaignCreator() {
   const navigate    = useNavigate();
   const { startGeneration } = useGeneration();
   const [loading,    setLoading]    = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [createdAd,  setCreatedAd]  = useState(null);
   const [uploadProgress, setUploadProgress] = useState("");
 
@@ -274,9 +275,16 @@ export default function CampaignCreator() {
     }
   };
 
-  const handleGenerate = () => {
-    startGeneration(createdAd.id, createdAd.title);
-    navigate("/admin");
+  const handleGenerate = async () => {
+    setGenerating(true);
+    try {
+      await startGeneration(createdAd.id, createdAd.title);
+      navigate("/admin");
+    } catch (err) {
+      alert("Strategy generation failed:\n\n" + extractErrorMessage(err));
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const websiteSelected = form.ad_types.includes("website");
@@ -474,12 +482,31 @@ export default function CampaignCreator() {
               )}
               {" "}Generate an AI marketing strategy and submit for review?
             </p>
-            <p className="text-xs" style={{ color: "var(--color-sidebar-text)", opacity: 0.6 }}>
-              You can navigate away — generation runs in the background.
-            </p>
-            <button onClick={handleGenerate} className="btn--accent px-8 py-2.5">
-              Generate Strategy & Submit for Review
-            </button>
+
+
+          <p
+            className="text-xs"
+            style={{ color: "var(--color-sidebar-text)", opacity: 0.6 }}
+          >
+            This may take a few seconds. Please don’t navigate away.
+          </p>
+
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="btn--accent px-8 py-2.5"
+          >
+            {generating ? (
+              <>
+                <span className="spinner" /> AI is generating strategy…
+              </>
+            ) : (
+              "Generate Strategy & Submit for Review"
+            )}
+          </button>
+
+
+
           </div>
         </SectionCard>
       )}

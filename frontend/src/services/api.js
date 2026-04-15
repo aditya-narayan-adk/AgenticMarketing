@@ -122,6 +122,27 @@ export const brandKitAPI = {
     }),
 };
 
+// ─── Profile (self-service, all roles) ───────────────────────────────────────
+
+export const profileAPI = {
+  getMe: () => request("/profile/me"),
+
+  updateMe: (data) =>
+    request("/profile/me", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  requestOtp: () =>
+    request("/profile/me/request-otp", { method: "POST" }),
+
+  changePassword: (otp, new_password) =>
+    request("/profile/me/change-password", {
+      method: "POST",
+      body: JSON.stringify({ otp, new_password }),
+    }),
+};
+
 // ─── M2: Users ───────────────────────────────────────────────────────────────
 
 export const usersAPI = {
@@ -135,6 +156,15 @@ export const usersAPI = {
 
   deactivate: (userId) =>
     request(`/users/${userId}/deactivate`, { method: "PATCH" }),
+
+  changeRole: (userId, role) =>
+    request(`/users/${userId}/role`, {
+      method: "PATCH",
+      body: JSON.stringify({ role }),
+    }),
+
+  delete: (userId) =>
+    request(`/users/${userId}`, { method: "DELETE" }),
 };
 
 // ─── M3: Documents ───────────────────────────────────────────────────────────
@@ -297,6 +327,27 @@ export const adsAPI = {
 
   distributeCreatives: (adId, data) =>
     request(`/advertisements/${adId}/distribute`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  // Ethics reviewer: regenerate content with ethical notes
+  regenerateWithEthics: (adId, data) =>
+    request(`/advertisements/${adId}/ethics-regenerate`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  // Ethics reviewer: clear campaign for publishing
+  ethicsClear: (adId, notes) =>
+    request(`/advertisements/${adId}/ethics-clear`, {
+      method: "POST",
+      body: JSON.stringify({ notes }),
+    }),
+
+  // Publisher: request AI regeneration based on optimizer suggestions; sends back to ethics review
+  publisherRegenerate: (adId, data) =>
+    request(`/advertisements/${adId}/publisher-regenerate`, {
       method: "POST",
       body: JSON.stringify(data),
     }),

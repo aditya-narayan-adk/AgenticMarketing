@@ -37,7 +37,7 @@ import { useGeneration, GEN_STEPS } from "../../contexts/GenerationContext";
 import {
   LayoutDashboard, Users, FileText, BarChart3,
   LogOut, Shield, Eye, Megaphone, Globe, Bot,
-  Rocket, Share2, Sparkles, X,
+  Rocket, Share2, Settings, UserCircle,
 } from "lucide-react";
 
 // ─── RoleGuardedRoute ─────────────────────────────────────────────────────────
@@ -91,6 +91,8 @@ const SIDEBAR_LINKS_BY_ROLE = {
     { label: "Deploy",      icon: Rocket,          path: "/publisher/deploy" },
     { label: "Distribute",  icon: Share2,          path: "/publisher/distribute" },
     { label: "Analytics",   icon: BarChart3,       path: "/publisher/analytics" },
+    { label: "Settings",    icon: Settings,        path: "/publisher/settings" },
+    { label: "My Profile",  icon: UserCircle,      path: "/profile" },
   ],
 };
 
@@ -289,6 +291,7 @@ const STATUS_TO_CSS_MODIFIER = {
   under_review:     "status-badge--review",
   ethics_review:    "status-badge--review",
   approved:         "status-badge--approved",
+  ethics_cleared:   "status-badge--approved",
   published:        "status-badge--published",
   paused:           "status-badge--paused",
   optimizing:       "status-badge--draft",
